@@ -1,7 +1,6 @@
-import { assert, module, test } from 'qunit';
-import { visit, currentURL } from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { click, find, visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import click from '@ember/test-helpers/dom/click';
 
 module('Acceptance | super rentals', function (hooks) {
   setupApplicationTest(hooks);
@@ -45,6 +44,35 @@ module('Acceptance | super rentals', function (hooks) {
     await click('.jumbo a.button');
 
     assert.equal(currentURL(), '/about');
+  });
+
+  test('viewing the details of a rental property', async function (assert) {
+    await visit('/');
+    assert.dom('.rental').exists({ count: 3 });
+
+    await click('.rental:first-of-type a');
+    assert.equal(currentURL(), '/rentals/grand-old-mansion');
+  });
+
+  test('visiting /rentals/grand-old-mansion', async function (assert) {
+    await visit('/rentals/grand-old-mansion');
+
+    assert.equal(currentURL(), '/rentals/grand-old-mansion');
+    assert.dom('nav').exists();
+    assert.dom('h1').containsText('SuperRentals');
+    assert.dom('h2').containsText('Grand Old Mansion');
+    assert.dom('.rental.detailed').exists();
+    assert.dom('.share.button').hasText('Share on Twitter');
+
+    let button = find('.share.button');
+
+    let tweetURL = new URL(button.href);
+    assert.equal(tweetURL.host, 'twitter.com');
+
+    assert.equal(
+      tweetURL.searchParams.get('url'),
+      `${window.location.origin}/rentals/grand-old-mansion`
+    );
   });
 
   test('navigating using the nav-bar', async function (assert) {

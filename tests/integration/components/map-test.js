@@ -16,7 +16,7 @@ module('Integration | Component | map', function (hooks) {
       @height="120"
     >template block text</Map>`);
 
-        assert
+    assert
       .dom('.map img')
       .exists()
       .hasAttribute('alt', 'Map image at coordinates 37.7797,-122.4184')
@@ -24,10 +24,10 @@ module('Integration | Component | map', function (hooks) {
       .hasAttribute('width', '150')
       .hasAttribute('height', '120');
 
-          let { src } = find('.map img');
+    let { src } = find('.map img');
     let token = encodeURIComponent(ENV.MAPBOX_ACCESS_TOKEN);
 
-        assert.ok(
+    assert.ok(
       src.startsWith('https://api.mapbox.com/'),
       'the src starts with "https://api.mapbox.com/"'
     );
@@ -145,5 +145,4 @@ module('Integration | Component | map', function (hooks) {
       .hasAttribute('width', '150')
       .hasAttribute('height', '120');
   });
-
 });
